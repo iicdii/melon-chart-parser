@@ -1,0 +1,29 @@
+{
+  "name": "melon-chart-parser",
+  "version": "1.0.0",
+  "description": "Melon chart parser",
+  "main": "index.js",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.1",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iicdii/melon-chart-parser.git"
+  },
+  "keywords": [
+    "melon"
+  ],
+  "author": "Harim Kim",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iicdii/melon-chart-parser/issues"
+  },
+  "homepage": "https://github.com/iicdii/melon-chart-parser#readme",
+  "false": {}
+}
