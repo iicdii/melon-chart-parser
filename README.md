@@ -1,9 +1,12 @@
-# Melon-chart-parser
+# Melon Chart Parser
 
 <p>
   <a href="https://www.npmjs.com/package/melon-chart-parser"><img src="https://img.shields.io/npm/v/melon-chart-parser.svg?style=flat-square"></a>
   <a href="https://www.npmjs.com/package/melon-chart-parser"><img src="https://img.shields.io/npm/dm/melon-chart-parser.svg?style=flat-square"></a>
 </p>
+
+## What's Melon Chart Parser?
+Melon Chart Parser is a module that parses the melon daily chart and obtains the data of the songs.
 
 ## Installation
 
@@ -13,8 +16,10 @@ npm install melon-chart-parser
   
 ## Usage
 ```javascript
+// var something = require('melon-chart-parser');
 var melon = require('melon-chart-parser');
 
+// get 10 songs from daily melon chart.
 melon.parse(10, function(res, err) {
   if (err) return;
 
@@ -66,3 +71,23 @@ Output should be like
     artistName: '아이유',
     album: 'Palette' } ]
 ```
+
+## API
+
+### melon(limit, callback)
+
+#### limit
+
+Type: `number`
+Min: `0`
+Max: `100`
+Default: `50`
+
+a limit how many songs should be returned.
+
+#### callback
+##### songs
+an array of songs object.
+
+##### err
+error while requesting melon chart site.
