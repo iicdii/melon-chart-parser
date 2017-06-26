@@ -102,7 +102,7 @@ var melon = require('melon-chart-parser');
 var opts = {
   limit: 100,
   type: 'year',
-  genre: 'KPOP' // or 'POP'
+  genre: 'KPOP', // or 'POP'
   year: 2015
 };
 
@@ -120,7 +120,7 @@ var melon = require('melon-chart-parser');
 var opts = {
   limit: 100,
   type: 'genre',
-  genre: 'DP0300' // A list of possible genres can be read at the bottom of the document.
+  genre: 'DP0300', // A list of possible genres can be read at the bottom of the document.
   year: 2015
 };
 
