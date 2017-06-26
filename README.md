@@ -121,7 +121,6 @@ var opts = {
   limit: 100,
   type: 'genre',
   genre: 'DP0300', // A list of possible genres can be read at the bottom of the document.
-  year: 2015
 };
 
 melon.parse(100, function(res, err) {
