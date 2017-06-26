@@ -18,7 +18,6 @@ npm install melon-chart-parser
 ### Get 10 songs from daily melon chart.
 ```javascript
 // var something = require('melon-chart-parser');
-// import melon from 'melon-chart-parser'; (ES6)
 var melon = require('melon-chart-parser');
 
 var opts = {
