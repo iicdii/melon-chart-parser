@@ -113,7 +113,7 @@ melon.parse(50, function(res, err) {
 });
 ```
 
-### Get 100 songs of this week's chart by genre.
+### Get 100 songs of this week's chart by OST genre.
 ```javascript
 var melon = require('melon-chart-parser');
 
@@ -216,7 +216,7 @@ when type is 'genre' you can send genre by genre parameter below value.
 'DP2000' (태교)
 ```
 
-or if type is 'year' you can send genre by genre parameter below value.
+or if type is 'year' you can send genre parameter below value.
 
 ```
 'KPOP' (KPOP),
