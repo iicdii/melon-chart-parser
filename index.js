@@ -1,7 +1,7 @@
 var cheerio = require('cheerio');
 var rp = require('request-promise');
 
-var opts = {
+var initialOptions = {
 	limit: 50,
 	type: 'daily',
 	genre: 'KPOP',
@@ -28,12 +28,11 @@ var opts = {
 
 /**
  * Parse melon chart.
- * @param {Options} option - Information about the chart you will request.
+ * @param {Options} options - Information about the chart you will request.
  * @param {getSongsCallback} callback - The callback that handles the response.
  */
-function parse(opts, callback) {
-	if (opts)
-		opts = opts;
+function parse(options, callback) {
+	var opts = Object.assign({}, initialOptions, options);
 	var songs = [];
 
 	if (!opts.limit) {
