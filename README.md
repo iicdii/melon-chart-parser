@@ -14,13 +14,13 @@ Melon Chart Parser is a module that parses the melon chart and obtains the data 
 npm install melon-chart-parser
 ```
   
-## Usage
+## Examples
+### Get 10 songs from daily melon chart.
 ```javascript
 // var something = require('melon-chart-parser');
 // import melon from 'melon-chart-parser'; (ES6)
 var melon = require('melon-chart-parser');
 
-// get 10 songs from daily melon chart.
 var opts = {
 	limit: 10,
 	type: 'daily'
@@ -78,6 +78,59 @@ Output should be like
     album: 'Palette' } ]
 ```
 
+### Get 50 songs of month chart.
+```javascript
+var melon = require('melon-chart-parser');
+
+var opts = {
+	limit: 50,
+	type: 'month',
+	month: 4
+};
+
+melon.parse(50, function(res, err) {
+  if (err) return;
+
+  console.log(res);
+});
+```
+
+### Get 100 songs of year chart.
+```javascript
+var melon = require('melon-chart-parser');
+
+var opts = {
+	limit: 100,
+	type: 'year',
+	genre: 'KPOP' // or 'POP'
+	year: 2015
+};
+
+melon.parse(50, function(res, err) {
+  if (err) return;
+
+  console.log(res);
+});
+```
+
+### Get 100 songs of this week's chart by genre.
+```javascript
+var melon = require('melon-chart-parser');
+
+var opts = {
+	limit: 100,
+	type: 'genre',
+	genre: 'DP0300' // A list of possible genres can be read at the bottom of the document.
+	year: 2015
+};
+
+melon.parse(100, function(res, err) {
+  if (err) return;
+
+  console.log(res);
+});
+```
+
 ## Functions
 
 <dl>
@@ -132,66 +185,6 @@ Request options.
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
 | limit | <code>number</code> | <code>50</code> | option.limit Limit how many songs you will get (default 50, max 100). |
-| type | <code>string</code> | <code>&quot;daily&quot;</code> | option.type The type of chart. (daily, week, year, genre) |
-| genre | <code>string</code> | <code>&quot;KPOP&quot;</code> | option.genre The type of genre. |
-|  | <code>number</code> |  | option.year Year. |
-|  | <code>number</code> |  | option.month Month. |
-
-Harim-MacBook-Pro:melon-chart-parser kimharim$ jsdoc2md index.js
-## Functions
-
-<dl>
-<dt><a href="#parse">parse(option, callback)</a></dt>
-<dd><p>Parse melon chart.</p>
-</dd>
-</dl>
-
-## Typedefs
-
-<dl>
-<dt><a href="#getSongsCallback">getSongsCallback</a> : <code>function</code></dt>
-<dd><p>Callback for getting chart information.</p>
-</dd>
-<dt><a href="#Options">Options</a> : <code>Object</code></dt>
-<dd><p>Request options.</p>
-</dd>
-</dl>
-
-<a name="parse"></a>
-
-## parse(option, callback)
-Parse melon chart.
-
-**Kind**: global function  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| option | [<code>Options</code>](#Options) | Information about the chart you will request. |
-| callback | [<code>getSongsCallback</code>](#getSongsCallback) | The callback that handles the response. |
-
-<a name="getSongsCallback"></a>
-
-## getSongsCallback : <code>function</code>
-Callback for getting chart information.
-
-**Kind**: global typedef  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| res | <code>Object</code> | an array of songs. |
-| err | <code>Object</code> | error while requesting chart page. |
-
-<a name="Options"></a>
-
-## Options : <code>Object</code>
-Request options.
-
-**Kind**: global typedef  
-**Properties**
-
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| limit | <code>number</code> | <code>50</code> | option.limit Limit how many songs you will get (max 100). |
 | type | <code>string</code> | <code>&quot;daily&quot;</code> | option.type The type of chart. (daily, week, year, genre) |
 | genre | <code>string</code> | <code>&quot;KPOP&quot;</code> | option.genre The type of genre. |
 | year | <code>number</code> | <code>year of today</code> | option.year Year. |
