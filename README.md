@@ -22,8 +22,8 @@ npm install melon-chart-parser
 var melon = require('melon-chart-parser');
 
 var opts = {
-	limit: 10,
-	type: 'daily'
+  limit: 10,
+  type: 'daily'
 };
 
 melon.parse(10, function(res, err) {
@@ -83,9 +83,9 @@ Output should be like
 var melon = require('melon-chart-parser');
 
 var opts = {
-	limit: 50,
-	type: 'month',
-	month: 4
+  limit: 50,
+  type: 'month',
+  month: 4
 };
 
 melon.parse(50, function(res, err) {
@@ -100,10 +100,10 @@ melon.parse(50, function(res, err) {
 var melon = require('melon-chart-parser');
 
 var opts = {
-	limit: 100,
-	type: 'year',
-	genre: 'KPOP' // or 'POP'
-	year: 2015
+  limit: 100,
+  type: 'year',
+  genre: 'KPOP' // or 'POP'
+  year: 2015
 };
 
 melon.parse(50, function(res, err) {
@@ -118,10 +118,10 @@ melon.parse(50, function(res, err) {
 var melon = require('melon-chart-parser');
 
 var opts = {
-	limit: 100,
-	type: 'genre',
-	genre: 'DP0300' // A list of possible genres can be read at the bottom of the document.
-	year: 2015
+  limit: 100,
+  type: 'genre',
+  genre: 'DP0300' // A list of possible genres can be read at the bottom of the document.
+  year: 2015
 };
 
 melon.parse(100, function(res, err) {
