@@ -9,37 +9,31 @@ var opts = {
 	month: new Date().getMonth()+1
 };
 
-/*
-	when type is 'genre' you can send genre by genre parameter below value.
-
-	'DP0100' (가요),
-	'DP0200' (POP),
-	'DP0300' (OST),
-	'DP0400' (J-POP),
-	'DP0500' (클래식),
-	'DP0600' (CCM),
-	'DP0700' (어린이),
-	'DP0800' (뉴에이지),
-	'DP0900' (재즈),
-	'DP1000' (월드뮤직),
-	'DP1100' (종교음악),
-	'DP1200' (국악),
-	'DP1300' (중국음악),
-	'DP1400' (일렉트로니카/클럽뮤직),
-	'DP1500' (락/메탈),
-	'DP1600' (R&B/SOUL),
-	'DP1700' (랩/힙합),
-	'DP1800' (인디음악),
-	'DP1900' (트로트),
-	'DP2000' (태교)
-
-	or if type is 'year' you can send genre by genre parameter below value.
-
-	'KPOP' (KPOP),
-	'POP' (POP)
+/**
+ * Callback for getting chart information.
+ * @callback getSongsCallback
+ * @param {Object} res - an array of songs.
+ * @param {Object} err - error while requesting chart page.
  */
 
-function parse(opts = opts, callback) {
+/**
+ * Request options.
+ * @typedef {Object} Options
+ * @property {number} [limit=50] - option.limit Limit how many songs you will get (default 50, max 100).
+ * @property {string} [type=daily] - option.type The type of chart. (daily, week, year, genre)
+ * @property {string} [genre=KPOP] - option.genre The type of genre.
+ * @property {number} [year=year of today] - option.year Year.
+ * @property {number} [month=month of today] - option.month Month.
+ */
+
+/**
+ * Parse melon chart.
+ * @param {Options} option - Information about the chart you will request.
+ * @param {getSongsCallback} callback - The callback that handles the response.
+ */
+function parse(opts, callback) {
+	if (opts)
+		opts = opts;
 	var songs = [];
 
 	if (!opts.limit) {
