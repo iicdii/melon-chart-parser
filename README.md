@@ -26,11 +26,21 @@ var opts = {
   type: 'daily'
 };
 
-melon.parse(10, function(res, err) {
+// callback style
+melon.parse(opts, function(res, err) {
   if (err) return;
 
   console.log(res);
 });
+
+// promise style
+melon.parse(opts)
+  .then(function(res) {
+    console.log(res);
+  })
+  .catch(function(err) {
+    console.log(err);
+  });
 ```
 
 Output should be like
@@ -78,6 +88,8 @@ Output should be like
     album: 'Palette' } ]
 ```
 
+
+
 ### Get 50 songs of month chart.
 ```javascript
 var melon = require('melon-chart-parser');
@@ -88,7 +100,7 @@ var opts = {
   month: 4
 };
 
-melon.parse(50, function(res, err) {
+melon.parse(opts function(res, err) {
   if (err) return;
 
   console.log(res);
@@ -106,7 +118,7 @@ var opts = {
   year: 2015
 };
 
-melon.parse(50, function(res, err) {
+melon.parse(opts function(res, err) {
   if (err) return;
 
   console.log(res);
@@ -123,7 +135,7 @@ var opts = {
   genre: 'DP0300', // A list of possible genres can be read at the bottom of the document.
 };
 
-melon.parse(100, function(res, err) {
+melon.parse(opts, function(res, err) {
   if (err) return;
 
   console.log(res);

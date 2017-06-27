@@ -31,91 +31,102 @@ var initialOptions = {
  * @param {Options} options - Information about the chart you will request.
  * @param {getSongsCallback} callback - The callback that handles the response.
  */
+
 function parse(options, callback) {
-	var opts = Object.assign({}, initialOptions, options);
-	var songs = [];
+	return new Promise(function(resolve, reject) {
+		var opts = Object.assign({}, initialOptions, options);
 
-	if (!opts.limit) {
-		opts.limit = 50;
-	} else if (opts.limit > 100) {
-		opts.limit = 100;
-	} else if (opts.limit <= 0) {
-		return callback(songs);
-	}
+		if (!opts.limit) {
+			opts.limit = 50;
+		} else if (opts.limit > 100) {
+			opts.limit = 100;
+		} else if (opts.limit <= 0) {
+			var errorMessage = 'limit must be at least 0';
+			if (callback)
+				callback(null, errorMessage);
+			reject(errorMessage);
+		}
 
-	var url = 'http://www.melon.com/chart/day/index.htm?idx=1&moved=Y';
+		var url = 'http://www.melon.com/chart/day/index.htm?idx=1&moved=Y';
 
-	switch(opts.type) {
-		case 'daily':
-			break;
-		case 'week':
-			url = 'http://www.melon.com/chart/week/index.htm';
-			break;
-		case 'month':
-			if (!opts.month || !opts.year) break;
-			var month = ("0" + (opts.month)).slice(-2);
+		switch(opts.type) {
+			case 'daily':
+				break;
+			case 'week':
+				url = 'http://www.melon.com/chart/week/index.htm';
+				break;
+			case 'month':
+				if (!opts.month || !opts.year) break;
+				var month = ("0" + (opts.month)).slice(-2);
 
-			url = 'http://www.melon.com/chart/month/index.htm#params[idx]=1&params[rankMonth]=' + opts.year + opts.month;
-			break;
-		case 'year':
-			var year = opts.year;
-			var genre = opts.genre;
-			if (!year || !genre) break;
-			if (year === new Date().getFullYear()) year--;
+				url = 'http://www.melon.com/chart/month/index.htm#params[idx]=1&params[rankMonth]=' + opts.year + opts.month;
+				break;
+			case 'year':
+				var year = opts.year;
+				var genre = opts.genre;
+				if (!year || !genre) break;
+				if (year === new Date().getFullYear()) year--;
 
-			url = 'http://www.melon.com/chart/age/list.htm?moved=Y&chartType=YE&chartGenre=' + genre + '&chartDate=' + year;
-			break;
-		case 'genre':
-			var genre = opts.genre;
-			if (!genre) break;
+				url = 'http://www.melon.com/chart/age/list.htm?moved=Y&chartType=YE&chartGenre=' + genre + '&chartDate=' + year;
+				break;
+			case 'genre':
+				var genre = opts.genre;
+				if (!genre) break;
 
-			url = 'http://www.melon.com/chart/genre/index.htm?classCd=' + opts.genre;
-			break;
-		default:
-			break;
-	}
+				url = 'http://www.melon.com/chart/genre/index.htm?classCd=' + opts.genre;
+				break;
+			default:
+				break;
+		}
 
-	rp(url)
-		.then(function (html) {
-			var $ = cheerio.load(html);
-			var songs = [];
-			var tableEl = $('#chartListObj tr').not('.recommend_type');
+		rp(url)
+			.then(function (html) {
+				var $ = cheerio.load(html);
+				var songs = [];
+				var tableEl = $('#chartListObj tr').not('.recommend_type');
 
-			if (opts.type === 'year')
-				tableEl = $("#frm tbody tr");
+				if (opts.type === 'year')
+					tableEl = $("#frm tbody tr");
 
-		  tableEl.each(function(i, el) {
-		  	if (i >= opts.limit) return;
+				tableEl.each(function(i, el) {
+					if (i >= opts.limit) return;
 
-		  	var song_info_el = $(el).find('.wrap_song_info');
-		    var trackName = $(song_info_el).find('.ellipsis.rank01 strong a').text();
-		    // remove last white space
-		    trackName = trackName.replace(/(^[\s]+|[\s]+$)/g, '');
-		    var artistName = '';
+					var song_info_el = $(el).find('.wrap_song_info');
+					var trackName = $(song_info_el).find('.ellipsis.rank01 strong a').text();
+					// remove last white space
+					trackName = trackName.replace(/(^[\s]+|[\s]+$)/g, '');
+					var artistName = '';
 
-		    $(song_info_el).find('.ellipsis.rank02 .checkEllipsis')
-		    	.children()
-		    	.each(function(i, ele) {
-		    		if (i > 0)
-		    			artistName += ', ';
+					$(song_info_el).find('.ellipsis.rank02 .checkEllipsis')
+						.children()
+						.each(function(i, ele) {
+							if (i > 0)
+								artistName += ', ';
 
-		    		artistName += $(ele).text();
-		    	});
-		    var albumName = $(song_info_el).find('.ellipsis.rank03 a').text();
+							artistName += $(ele).text();
+						});
+					var albumName = $(song_info_el).find('.ellipsis.rank03 a').text();
 
-		    songs.push({
-		      'rank': i+1,
-		      'trackName': trackName,
-		      'artistName': artistName,
-		      'album': albumName
-		    });
-		  });
+					songs.push({
+						'rank': i+1,
+						'trackName': trackName,
+						'artistName': artistName,
+						'album': albumName
+					});
+				});
 
-		  return callback(songs);
-		})
-		.catch(function (err) {
-			return callback(null, err);
-		});
+				if (callback)
+					callback(songs, null);
+
+				resolve(songs);
+			})
+			.catch(function (err) {
+				if (callback)
+					callback(null, err);
+
+				reject(err);
+			});
+	});
 }
 
 module.exports.parse = parse;
