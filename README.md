@@ -99,7 +99,7 @@ var opts = {
   month: 4
 };
 
-melon.parse(opts function(res, err) {
+melon.parse(opts, function(res, err) {
   if (err) return;
 
   console.log(res);
@@ -117,7 +117,7 @@ var opts = {
   year: 2015
 };
 
-melon.parse(opts function(res, err) {
+melon.parse(opts, function(res, err) {
   if (err) return;
 
   console.log(res);
