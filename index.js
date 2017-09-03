@@ -83,16 +83,18 @@ function parse(options, callback) {
 			.then(function (html) {
 				var $ = cheerio.load(html);
 				var songs = [];
-				var tableEl = $('#chartListObj tr').not('.recommend_type');
+				//var tableEl = $('#chartListObj tr').not('.recommend_type');
 
-				if (opts.type === 'year')
-					tableEl = $("#frm tbody tr");
+				//if (opts.type === 'year')
+					var tableEl = $("#frm tbody tr");
 
 				tableEl.each(function(i, el) {
 					if (i >= opts.limit) return;
 
 					var song_info_el = $(el).find('.wrap_song_info');
-					var trackName = $(song_info_el).find('.ellipsis.rank01 strong a').text();
+					var trackName =
+						$(song_info_el).find('.ellipsis.rank01 strong a').text() ||
+						$(song_info_el).find('.ellipsis.rank01 span a').text();
 					// remove last white space
 					trackName = trackName.replace(/(^[\s]+|[\s]+$)/g, '');
 					var artistName = '';
