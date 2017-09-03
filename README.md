@@ -89,17 +89,18 @@ Output should be like
 
 
 
-### Get 50 songs of month chart.
+### Get 50 songs of 2016-05's month chart.
 ```javascript
 var melon = require('melon-chart-parser');
 
 var opts = {
   limit: 50,
   type: 'month',
-  month: 4
+  month: 5,
+  year: 2016
 };
 
-melon.parse(opts function(res, err) {
+melon.parse(opts, function(res, err) {
   if (err) return;
 
   console.log(res);
@@ -117,7 +118,7 @@ var opts = {
   year: 2015
 };
 
-melon.parse(opts function(res, err) {
+melon.parse(opts, function(res, err) {
   if (err) return;
 
   console.log(res);
