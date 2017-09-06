@@ -1,6 +1,6 @@
 {
   "name": "melon-chart-parser",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Melon chart parser",
   "main": "index.js",
   "dependencies": {
