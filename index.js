@@ -48,6 +48,7 @@ function parse(options, callback) {
 		}
 
 		var url = 'http://www.melon.com/chart/day/index.htm?idx=1&moved=Y';
+		var genre = opts.genre;
 
 		switch(opts.type) {
 			case 'daily':
@@ -59,21 +60,25 @@ function parse(options, callback) {
 				if (!opts.month || !opts.year) break;
 				var month = ("0" + (opts.month)).slice(-2);
 
-				url = 'http://www.melon.com/chart/month/index.htm#params[idx]=1&params[rankMonth]=' + opts.year + opts.month;
+				url = 'http://www.melon.com/chart/month/index.htm#params[idx]=1&params[rankMonth]=' + opts.year + month;
 				break;
 			case 'year':
 				var year = opts.year;
-				var genre = opts.genre;
+
 				if (!year || !genre) break;
 				if (year === new Date().getFullYear()) year--;
 
 				url = 'http://www.melon.com/chart/age/list.htm?moved=Y&chartType=YE&chartGenre=' + genre + '&chartDate=' + year;
 				break;
 			case 'genre':
-				var genre = opts.genre;
 				if (!genre) break;
 
-				url = 'http://www.melon.com/chart/genre/index.htm?classCd=' + opts.genre;
+				url = genre === 'GN1700' ?
+					'http://www.melon.com/genre/jazz_list.htm?gnrCode=' + genre :
+					'http://www.melon.com/genre/song_list.htm?gnrCode=' + genre;
+
+				console.log(url);
+
 				break;
 			default:
 				break;
@@ -130,5 +135,11 @@ function parse(options, callback) {
 			});
 	});
 }
+
+var opts = {
+  limit: 100,
+	type: 'genre',
+  genre: 'GN1700'
+};
 
 module.exports.parse = parse;
