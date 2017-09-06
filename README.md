@@ -205,6 +205,8 @@ Request options.
 when type is 'genre' you can send genre by genre parameter below value.
 
 ```
+'DM0000' 국내종합,
+'AB0000' 해외종합,
 'GN0100' 발라드,
 'GN0200' 댄스,
 'GN0300' 랩/힙합,

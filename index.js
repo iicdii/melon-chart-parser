@@ -73,11 +73,7 @@ function parse(options, callback) {
 			case 'genre':
 				if (!genre) break;
 
-				url = genre === 'GN1700' ?
-					'http://www.melon.com/genre/jazz_list.htm?gnrCode=' + genre :
-					'http://www.melon.com/genre/song_list.htm?gnrCode=' + genre;
-
-				console.log(url);
+				url = 'http://www.melon.com/chart/week/index.htm?classCd=' + genre;
 
 				break;
 			default:
@@ -135,11 +131,5 @@ function parse(options, callback) {
 			});
 	});
 }
-
-var opts = {
-  limit: 100,
-	type: 'genre',
-  genre: 'GN1700'
-};
 
 module.exports.parse = parse;
