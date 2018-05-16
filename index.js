@@ -6,7 +6,8 @@ var initialOptions = {
 	type: 'daily',
 	genre: 'KPOP',
 	year: new Date().getFullYear(),
-	month: new Date().getMonth()+1
+	month: new Date().getMonth()+1,
+	term: ''
 };
 
 /**
@@ -76,47 +77,91 @@ function parse(options, callback) {
 				url = 'http://www.melon.com/chart/week/index.htm?classCd=' + genre;
 
 				break;
+			case 'artist':
+				var term = opts.term;
+
+				if (!term) break;
+
+				url = 'http://www.melon.com/search/song/index.htm?q='+term+'&section=artist&searchGnbYn=Y&kkoSpl=Y&kkoDpType=&ipath=srch_form';
+				break;
 			default:
 				break;
 		}
+
+		url = encodeURI(url);
 
 		rp(url)
 			.then(function (html) {
 				var $ = cheerio.load(html);
 				var songs = [];
-				//var tableEl = $('#chartListObj tr').not('.recommend_type');
+				var tableEl;
 
-				//if (opts.type === 'year')
-					var tableEl = $("#frm tbody tr");
+				if (opts.type === 'artist') {
+					tableEl = $("#frm_defaultList tbody tr");
 
-				tableEl.each(function(i, el) {
-					if (i >= opts.limit) return;
+					tableEl.each(function(i, el) {
+						if (i >= opts.limit) return;
 
-					var song_info_el = $(el).find('.wrap_song_info');
-					var trackName =
-						$(song_info_el).find('.ellipsis.rank01 strong a').text() ||
-						$(song_info_el).find('.ellipsis.rank01 span a').text();
-					// remove last white space
-					trackName = trackName.replace(/(^[\s]+|[\s]+$)/g, '');
-					var artistName = '';
+						var song_info_el = $(el).find('.wrap.pd_none');
+						var trackName =
+							$(song_info_el).find('.ellipsis a.fc_gray').text();
+						// remove last white space
+						trackName = trackName.replace(/(^[\s]+|[\s]+$)/g, '');
 
-					$(song_info_el).find('.ellipsis.rank02 .checkEllipsis')
-						.children()
-						.each(function(i, ele) {
-							if (i > 0)
-								artistName += ', ';
+						var artist_info_el = $(el).find('.wrap.wrapArtistName');
 
-							artistName += $(ele).text();
+						var artistName = '';
+						$(artist_info_el).find('.ellipsis > a.fc_mgray')
+							.each(function(i, ele) {
+								if (i > 0)
+									artistName += ', ';
+
+								artistName += $(ele).text();
+							});
+
+						var album_info_el = $(el).find('.wrap:not(.wrapArtistName)');
+						var albumName =
+							$(album_info_el).find('.ellipsis a.fc_mgray').text();
+
+						songs.push({
+							'rank': i+1,
+							'trackName': trackName,
+							'artistName': artistName ? artistName : opts.term,
+							'album': albumName
 						});
-					var albumName = $(song_info_el).find('.ellipsis.rank03 a').text();
-
-					songs.push({
-						'rank': i+1,
-						'trackName': trackName,
-						'artistName': artistName,
-						'album': albumName
 					});
-				});
+				} else {
+					tableEl = $("#frm tbody tr");
+
+					tableEl.each(function(i, el) {
+						if (i >= opts.limit) return;
+
+						var song_info_el = $(el).find('.wrap_song_info');
+						var trackName =
+							$(song_info_el).find('.ellipsis.rank01 strong a').text() ||
+							$(song_info_el).find('.ellipsis.rank01 span a').text();
+						// remove last white space
+						trackName = trackName.replace(/(^[\s]+|[\s]+$)/g, '');
+						var artistName = '';
+
+						$(song_info_el).find('.ellipsis.rank02 .checkEllipsis')
+							.children()
+							.each(function(i, ele) {
+								if (i > 0)
+									artistName += ', ';
+
+								artistName += $(ele).text();
+							});
+						var albumName = $(song_info_el).find('.ellipsis.rank03 a').text();
+
+						songs.push({
+							'rank': i+1,
+							'trackName': trackName,
+							'artistName': artistName,
+							'album': albumName
+						});
+					});
+				}
 
 				if (callback)
 					callback(songs, null);

@@ -142,6 +142,23 @@ melon.parse(opts, function(res, err) {
 });
 ```
 
+### Get 50 songs of IU songs, which is ordered by popularity.
+```javascript
+var melon = require('melon-chart-parser');
+
+var opts = {
+  limit: 50,
+  type: 'artist',
+  term: '아이유'
+};
+
+melon.parse(opts, function(res, err) {
+  if (err) return;
+
+  console.log(res);
+});
+```
+
 ## Functions
 
 <dl>
