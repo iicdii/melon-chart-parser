@@ -34,6 +34,7 @@ var initialOptions = {
  */
 
 function parse(options, callback) {
+	callback = callback || null;
 	return new Promise(function(resolve, reject) {
 		var opts = Object.assign({}, initialOptions, options);
 
