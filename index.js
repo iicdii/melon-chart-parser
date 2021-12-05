@@ -1,7 +1,7 @@
-var cheerio = require('cheerio');
-var rp = require('request-promise');
+const cheerio = require('cheerio');
+const axios = require('axios');
 
-var initialOptions = {
+const initialOptions = {
 	limit: 50,
 	type: 'daily',
 	genre: 'KPOP',
@@ -30,60 +30,59 @@ var initialOptions = {
 /**
  * Parse melon chart.
  * @param {Options} options - Information about the chart you will request.
- * @param {getSongsCallback} callback - The callback that handles the response.
+ * @param {getSongsCallback} [callback] - The callback that handles the response.
  */
-
 function parse(options, callback) {
 	callback = callback || null;
 	return new Promise(function(resolve, reject) {
-		var opts = Object.assign({}, initialOptions, options);
+		const opts = Object.assign({}, initialOptions, options);
 
 		if (!opts.limit) {
 			opts.limit = 50;
 		} else if (opts.limit > 100) {
 			opts.limit = 100;
 		} else if (opts.limit <= 0) {
-			var errorMessage = 'limit must be at least 0';
+			const errorMessage = 'limit must be at least 0';
 			if (callback)
 				callback(null, errorMessage);
 			reject(errorMessage);
 		}
 
-		var url = 'http://www.melon.com/chart/day/index.htm?idx=1&moved=Y';
-		var genre = opts.genre;
+		let url = 'https://www.melon.com/chart/day/index.htm?idx=1&moved=Y';
+		const genre = opts.genre;
 
 		switch(opts.type) {
 			case 'daily':
 				break;
 			case 'week':
-				url = 'http://www.melon.com/chart/week/index.htm';
+				url = 'https://www.melon.com/chart/week/index.htm';
 				break;
 			case 'month':
 				if (!opts.month || !opts.year) break;
-				var month = ("0" + (opts.month)).slice(-2);
+				const month = ("0" + (opts.month)).slice(-2);
 
-				url = 'http://www.melon.com/chart/month/index.htm#params[idx]=1&params[rankMonth]=' + opts.year + month;
+				url = 'https://www.melon.com/chart/month/index.htm#params[idx]=1&params[rankMonth]=' + opts.year + month;
 				break;
 			case 'year':
-				var year = opts.year;
+				let year = opts.year;
 
 				if (!year || !genre) break;
 				if (year === new Date().getFullYear()) year--;
 
-				url = 'http://www.melon.com/chart/age/list.htm?moved=Y&chartType=YE&chartGenre=' + genre + '&chartDate=' + year;
+				url = 'https://www.melon.com/chart/age/list.htm?moved=Y&chartType=YE&chartGenre=' + genre + '&chartDate=' + year;
 				break;
 			case 'genre':
 				if (!genre) break;
 
-				url = 'http://www.melon.com/chart/week/index.htm?classCd=' + genre;
+				url = 'https://www.melon.com/chart/week/index.htm?classCd=' + genre;
 
 				break;
 			case 'artist':
-				var term = opts.term;
+				const term = opts.term;
 
 				if (!term) break;
 
-				url = 'http://www.melon.com/search/song/index.htm?q='+term+'&section=artist&searchGnbYn=Y&kkoSpl=Y&kkoDpType=&ipath=srch_form';
+				url = 'https://www.melon.com/search/song/index.htm?q='+term+'&section=artist&searchGnbYn=Y&kkoSpl=Y&kkoDpType=&ipath=srch_form';
 				break;
 			default:
 				break;
@@ -91,11 +90,11 @@ function parse(options, callback) {
 
 		url = encodeURI(url);
 
-		rp(url)
-			.then(function (html) {
-				var $ = cheerio.load(html);
-				var songs = [];
-				var tableEl;
+		axios.get(url)
+			.then(function (res) {
+				const $ = cheerio.load(res.data);
+				const songs = [];
+				let tableEl;
 
 				if (opts.type === 'artist') {
 					tableEl = $("#frm_defaultList tbody tr");
@@ -103,15 +102,15 @@ function parse(options, callback) {
 					tableEl.each(function(i, el) {
 						if (i >= opts.limit) return;
 
-						var song_info_el = $(el).find('.wrap.pd_none');
-						var trackName =
+						const song_info_el = $(el).find('.wrap.pd_none');
+						let trackName =
 							$(song_info_el).find('.ellipsis a.fc_gray').text();
 						// remove last white space
 						trackName = trackName.replace(/(^[\s]+|[\s]+$)/g, '');
 
-						var artist_info_el = $(el).find('.wrap.wrapArtistName');
+						const artist_info_el = $(el).find('.wrap.wrapArtistName');
 
-						var artistName = '';
+						let artistName = '';
 						$(artist_info_el).find('.ellipsis > a.fc_mgray')
 							.each(function(i, ele) {
 								if (i > 0)
@@ -120,8 +119,8 @@ function parse(options, callback) {
 								artistName += $(ele).text();
 							});
 
-						var album_info_el = $(el).find('.wrap:not(.wrapArtistName)');
-						var albumName =
+						const album_info_el = $(el).find('.wrap:not(.wrapArtistName)');
+						const albumName =
 							$(album_info_el).find('.ellipsis a.fc_mgray').text();
 
 						songs.push({
@@ -137,13 +136,13 @@ function parse(options, callback) {
 					tableEl.each(function(i, el) {
 						if (i >= opts.limit) return;
 
-						var song_info_el = $(el).find('.wrap_song_info');
-						var trackName =
+						const song_info_el = $(el).find('.wrap_song_info');
+						let trackName =
 							$(song_info_el).find('.ellipsis.rank01 strong a').text() ||
 							$(song_info_el).find('.ellipsis.rank01 span a').text();
 						// remove last white space
 						trackName = trackName.replace(/(^[\s]+|[\s]+$)/g, '');
-						var artistName = '';
+						let artistName = '';
 
 						$(song_info_el).find('.ellipsis.rank02 .checkEllipsis')
 							.children()
@@ -153,7 +152,7 @@ function parse(options, callback) {
 
 								artistName += $(ele).text();
 							});
-						var albumName = $(song_info_el).find('.ellipsis.rank03 a').text();
+						const albumName = $(song_info_el).find('.ellipsis.rank03 a').text();
 
 						songs.push({
 							'rank': i+1,
