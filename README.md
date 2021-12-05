@@ -13,14 +13,17 @@ Melon Chart Parser is a module that parses the melon chart and obtains the data 
 ```
 npm install melon-chart-parser
 ```
+```
+yarn add melon-chart-parser
+```
   
 ## Examples
 ### Get 10 songs from daily melon chart.
 ```javascript
 // var something = require('melon-chart-parser');
-var melon = require('melon-chart-parser');
+const melon = require('melon-chart-parser');
 
-var opts = {
+const opts = {
   limit: 10,
   type: 'daily'
 };
@@ -91,9 +94,9 @@ Output should be like
 
 ### Get 50 songs of 2016-05's month chart.
 ```javascript
-var melon = require('melon-chart-parser');
+const melon = require('melon-chart-parser');
 
-var opts = {
+const opts = {
   limit: 50,
   type: 'month',
   month: 5,
@@ -109,9 +112,9 @@ melon.parse(opts, function(res, err) {
 
 ### Get 100 songs of year chart.
 ```javascript
-var melon = require('melon-chart-parser');
+const melon = require('melon-chart-parser');
 
-var opts = {
+const opts = {
   limit: 100,
   type: 'year',
   genre: 'KPOP', // or 'POP'
@@ -127,9 +130,9 @@ melon.parse(opts, function(res, err) {
 
 ### Get 100 songs of this week's chart by OST genre.
 ```javascript
-var melon = require('melon-chart-parser');
+const melon = require('melon-chart-parser');
 
-var opts = {
+const opts = {
   limit: 100,
   type: 'genre',
   genre: 'DP0300', // A list of possible genres can be read at the bottom of the document.
@@ -144,9 +147,9 @@ melon.parse(opts, function(res, err) {
 
 ### Get 50 songs of IU songs, which is ordered by popularity.
 ```javascript
-var melon = require('melon-chart-parser');
+const melon = require('melon-chart-parser');
 
-var opts = {
+const opts = {
   limit: 50,
   type: 'artist',
   term: '아이유'
